@@ -37,7 +37,7 @@ class _SignInScreenState extends State<SignInScreen> {
           height: MediaQuery.of(context).size.height,
           child: Column(children: [
             Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 5),
+              padding: const EdgeInsets.only(top: 60, bottom: 5),
               child: Text(
                 "Welcome",
                 style: TextStyle(
@@ -175,7 +175,7 @@ class _SignInScreenState extends State<SignInScreen> {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 90),
+                  padding: const EdgeInsets.symmetric(horizontal: 70),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -227,7 +227,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Profile(),
+                          builder: (context) => GuestProfile(),
                         ));
                   },
                   child: Text(

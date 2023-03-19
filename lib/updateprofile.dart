@@ -1,22 +1,33 @@
-import 'dart:math';
+import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:settyl_app/flutterfire.dart';
-import 'package:settyl_app/home_view.dart';
+import 'package:settyl_app/profile.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class Updateprofile extends StatefulWidget {
+  const Updateprofile({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<Updateprofile> createState() => _UpdateprofileState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  // Text Controller for Email And Password.
+class _UpdateprofileState extends State<Updateprofile> {
+  TextEditingController _userName = TextEditingController();
   TextEditingController _emailField = TextEditingController();
   TextEditingController _passwordField = TextEditingController();
-  TextEditingController _userName = TextEditingController();
+  TextEditingController _address = TextEditingController();
+  @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+    _userName.text = FirebaseAuth.instance.currentUser!.displayName.toString();
+    _emailField.text = FirebaseAuth.instance.currentUser!.email.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           centerTitle: true,
           // Appbar Title for the page.
           title: Text(
-            "Sign Up",
+            "Update Profile",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           backgroundColor: Color(0xFF141414),
@@ -55,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _userName,
                   decoration: InputDecoration(
                       // Label on Email input Dialog Box
-                      labelText: "Name",
+                      labelText: "Update Name",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       suffixIcon: Padding(
                         padding: EdgeInsets.fromLTRB(0, 13, 13, 13),
@@ -68,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 42, vertical: 20),
                       labelStyle: TextStyle(color: Colors.white),
-                      hintText: "Enter your Name",
+                      hintText: "Enter updated Name",
                       hintStyle: TextStyle(color: Colors.white),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(28),
@@ -90,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _emailField,
                   decoration: InputDecoration(
                       // Label on Email input Dialog Box
-                      labelText: "Email",
+                      labelText: "Update Email",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       suffixIcon: Padding(
                         padding: EdgeInsets.fromLTRB(0, 13, 13, 13),
@@ -103,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 42, vertical: 20),
                       labelStyle: TextStyle(color: Colors.white),
-                      hintText: "Enter your Email",
+                      hintText: "Enter your new Email",
                       hintStyle: TextStyle(color: Colors.white),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(28),
@@ -123,7 +134,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   style: TextStyle(color: Colors.white),
                   controller: _passwordField,
                   decoration: InputDecoration(
-                      labelText: "Password",
+                      labelText: "Update Password",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       suffixIcon: Padding(
                         padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
@@ -135,7 +146,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 42, vertical: 20),
                       labelStyle: TextStyle(color: Colors.white),
-                      hintText: "Enter your password",
+                      hintText: "Enter your new password",
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: Colors.white),
+                          gapPadding: 10),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: Colors.white),
+                          gapPadding: 10)),
+                ),
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                child: TextFormField(
+                  obscureText: false,
+                  style: TextStyle(color: Colors.white),
+                  controller: _address,
+                  decoration: InputDecoration(
+                      labelText: "Update Addresss",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      suffixIcon: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                        child: SvgPicture.asset(
+                          "assets/Lock.svg",
+                          height: 18,
+                        ),
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 42, vertical: 20),
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintText: "Enter your new Address",
                       hintStyle: TextStyle(color: Colors.white),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(28),
@@ -159,18 +202,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             borderRadius: BorderRadius.circular(28)),
                         backgroundColor: Color(0xFF0000AE)),
                     onPressed: () async {
-                      bool shouldNavigate = await register(_emailField.text,
-                          _passwordField.text, _userName.text);
-                      if (shouldNavigate) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeView(),
-                            ));
-                      }
+                      updateprofile(_userName.text, _emailField.text,
+                          _passwordField.text, _address.text);
                     },
                     child: Text(
-                      "Register",
+                      "Update",
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -178,6 +214,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ]),
           ),
+        ));
+  }
+
+  void updateprofile(
+      String name, String email, String password, String add) async {
+    await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
+    await FirebaseAuth.instance.currentUser!.updateEmail(email);
+    await FirebaseAuth.instance.currentUser!.updatePassword(password);
+    final docUser = FirebaseFirestore.instance.collection('Users').doc(email);
+    final json = {
+      'Add': add,
+    };
+    await docUser.set(json);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Profile(),
         ));
   }
 }

@@ -17,10 +17,13 @@ Future<bool> signIn(String email, String password) async {
 }
 
 // Register connection with Firebase.
-Future<bool> register(String email, String password) async {
+Future<bool> register(String email, String password, String name) async {
   try {
-    await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
 
     return true;
   } on FirebaseAuthException catch (e) {
